@@ -73,3 +73,5 @@ $cfg_soft_public =
     WHERE wp_posts.id = dede_archives.id
     ```
     至此文章内容部分转换完成！
+    
+    本文转载自：https://www.boke8.net/dedecms-change-wordpress.html 此外本人还进行了一些优化
