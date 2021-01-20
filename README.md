@@ -38,9 +38,9 @@
 具体如何查看：
 找到`common.inc.php`文件，里面的
 ```php
-$cfg_version = 
-$cfg_soft_lang = 
-$cfg_soft_public = 
+$cfg_version = 'V57_UTF8_SP2';
+$cfg_soft_lang = 'utf-8';
+$cfg_soft_public = 'base';
 ```
 即可知道是什么编码
 ### 导入织梦RSS步骤
