@@ -47,4 +47,29 @@ $cfg_soft_public =
 1.  织梦DedeCMS文章标题等基本数据导入wordpress站点
     进入wordpress后台admin => 工具 => 导入 => RSS, 上传导入生成的织梦全站RSS文件。
     导入过程中有可能会超时，重新上传RSS即可，不会重复导入。
+    注：我通过修改`rss-import.php`里的`get_posts function`，实现了同时导入织梦文章id到wordpress.
+2.  导入织梦CMS文章全文到wordpress站点
+    织梦文章的数据存储在dede_addonarticle数据库的body字段中，现在需要把body字段的内容转到wordpress数据库的wp_posts数据库的         post_content字段里。
+
+    这个转换需要使用一个桥梁——那就是dede_archives数据表，即dede_addonarticle上body的内容先转到dede_archives上，再从               dede_archives转到wp_posts的post_content里。这两次转换的匹配点，分别是织梦里的文章id，以及Wordpress里已经导入了的文章标题       （这与织梦里的文章标题是一样的）。
     
+    具体步骤如下：
+    进入phpmyadmin，选择dedecms网站使用的数据库，在SQL输入框中执行以下SQL语句，在织梦数据库的dede_archives表上，添加字段body
+    ```php
+    ALTER TABLE dede_archives ADD body longtext NOT NULL
+    ```
+    然后再执行以下SQL语句把dede_addonarticle数据表中的body字段内容导入到dede_archives的body字段，语句以dede_addonarticle的aid     和dede_archives的id为匹配点：
+    ```php
+    UPDATE dede_archives,dede_addonarticle
+    SET dede_archives.body = dede_addonarticle.body  
+    WHERE dede_archives.id = dede_addonarticle.aid
+    ```
+    接着通过phpmyadmin导出功能把dede_archives数据表导出，然后再通过导入功能把该数据表导入wordpress网站使用的数据库中，使其与       wp_posts数据库处在同一个数据库里。
+
+    下面再次使用SQL语句把dede_archives的body导入到wp_posts上的post_content上，~~以文章标题为匹配点（前提是文章标题都是唯一的）~~ 以ID为匹配点：
+    ```php
+    UPDATE wp_posts,dede_archives  
+    SET wp_posts.post_content = dede_archives.body  
+    WHERE wp_posts.id = dede_archives.id
+    ```
+    至此文章内容部分转换完成！
