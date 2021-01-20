@@ -47,7 +47,7 @@ $cfg_soft_public =
 1.  织梦DedeCMS文章标题等基本数据导入wordpress站点
     进入wordpress后台admin => 工具 => 导入 => RSS, 上传导入生成的织梦全站RSS文件。
     导入过程中有可能会超时，重新上传RSS即可，不会重复导入。
-    注：我通过修改`rss-import.php`里的`get_posts function`，实现了同时导入织梦文章id到wordpress.
+    注：我通过修改`rss-import.php`里的`get_posts function`，实现了同时导入织梦文章id到wordpress. 具体请见这里：              https://github.com/zyfcjtc/dedecms_to_wordpress/blob/main/get_posts.php
 2.  导入织梦CMS文章全文到wordpress站点
     织梦文章的数据存储在dede_addonarticle数据库的body字段中，现在需要把body字段的内容转到wordpress数据库的wp_posts数据库的         post_content字段里。
 
